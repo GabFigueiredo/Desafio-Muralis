@@ -1,8 +1,9 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { CloseButton, Content, HeaderContent, Overlay, StyledDialogTitle, TableStyle, TBodyTable } from './styles'
 import { PencilSimple, Trash, XCircle } from '@phosphor-icons/react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { ClientContext } from '../../../../contexts/ClientsContext'
+import { EditClientModal } from '../EditClientModal'
 
 interface Cliente {
     id: number,
@@ -18,6 +19,7 @@ interface UserCardProps {
 }
 
 export function UserCard({ cliente, setIsUserCardModalOpen }: UserCardProps) {
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const { deleteClient } = useContext(ClientContext)
 
     function handleDeleteClient() {
@@ -33,9 +35,17 @@ export function UserCard({ cliente, setIsUserCardModalOpen }: UserCardProps) {
                     <HeaderContent>
                         <div>
                             <StyledDialogTitle>{cliente.nome}</StyledDialogTitle>
-                            <button>
-                                <PencilSimple size={24} />
-                            </button>
+                            <Dialog.Root open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+                                <Dialog.Trigger asChild>
+                                    <PencilSimple size={24} />
+                                </Dialog.Trigger>
+
+                                <EditClientModal 
+                                    setIsEditModalOpen={setIsEditModalOpen}
+                                    cliente={cliente}
+                                />
+
+                            </Dialog.Root>
                             <button onClick={handleDeleteClient}>
                                 <Trash size={24}/>
                             </button>
@@ -83,4 +93,6 @@ export function UserCard({ cliente, setIsUserCardModalOpen }: UserCardProps) {
             </Content>
         </Dialog.Portal>
 )
+
+
 }

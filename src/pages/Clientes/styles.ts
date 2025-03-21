@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import * as RadioGroup from '@radix-ui/react-radio-group'
 
 export const MainContainer = styled.main `
     width: 100%;
@@ -47,4 +48,86 @@ export const TableContainer = styled.div `
     max-height: calc(100vh - 21rem); 
     overflow: auto; 
     width: 100%;
+`
+
+
+export const SearchBar = styled.div `
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    border-radius: 6px;
+    padding: 0px;
+    gap: 16px;
+
+    gap: 1rem;
+`
+
+export const SearchField = styled.form `
+    display: flex;
+    flex: 1;
+    align-items: center;
+    background-color: ${props => props.theme.inputGray};
+    border-radius: 6px;
+    gap: 0.5rem;
+
+    > input {
+        flex: 1;
+
+        padding: 1rem;
+        border-radius: 6px;
+        border: 0;
+        background-color: ${props => props.theme.inputGray};
+        &::placeholder {
+            color: ${props => props.theme.placeholder};
+        }
+    }
+
+    > button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border: 0;
+        background-color: ${props => props.theme.inputGray};
+        margin: 1rem;
+        color: ${props => props.theme.placeholder};
+
+        height: min-content;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+`
+
+export const FilterOptionContainer = styled(RadioGroup.Root)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${props => props.theme.inputGray};
+    border-radius: 6px;
+` 
+
+export const OptionButton = styled(RadioGroup.Item)`
+    background-color: ${props => props.theme.inputGray};
+
+    max-width: 77px;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+
+    padding: 1rem;
+    border-radius: 6px;
+
+
+    &[data-state="checked"] {
+        background-color: ${({ theme }) => theme.tableHeadGray}; /* Cor ativa */
+    }
 `

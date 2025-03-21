@@ -1,5 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import styled from 'styled-components'
+import * as RadioGroup from '@radix-ui/react-radio-group'
+import { propTypes } from 'cleave.js/react'
 
 export const Overlay = styled(Dialog.Overlay)`
     position: fixed;
@@ -80,4 +82,15 @@ export const CloseButton = styled(Dialog.Close)`
     line-height: 0;
     cursor: pointer;
     color: ${props => props.theme.white};
+`
+
+export const RadioButton = styled(RadioGroup.Item)`
+    flex: 1;
+    padding: 1rem;
+
+    background: transparent;
+    border: solid 1px ${props => props.theme.orangeMuralis};
+
+    border-radius: 6px;
+
 `

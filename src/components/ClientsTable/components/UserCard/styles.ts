@@ -52,8 +52,13 @@ export const HeaderContent = styled.header `
         color: ${props => props.theme.white};
         line-height: 0;
         cursor: pointer;
-    }
 
+        &:hover {
+            color: ${props => props.theme.orangeMuralis};
+        }
+
+    }
+    
     svg:last-child {
         &:hover {
             color: ${props => props.theme.redDanger};

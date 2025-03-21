@@ -24,8 +24,8 @@ interface ClientsContextProviderProps {
 // eslint-disable-next-line react-refresh/only-export-components
 export const ClientContext = createContext({} as ClientContextType)
 
-
 export function ClientsContextProvider({children}: ClientsContextProviderProps) {
+
     const [clientes, dispatch] = useReducer(clientsReducer, [{
         id: 1,
         CPF: '12345678910',
@@ -53,6 +53,7 @@ export function ClientsContextProvider({children}: ClientsContextProviderProps) 
 
         // Bate na API
         dispatch(editClientAction(IDToEdit, newValues))
+        console.log(clientes)
     }
     
     useEffect(() => {

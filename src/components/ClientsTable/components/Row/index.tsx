@@ -17,7 +17,6 @@ interface SingleRowProps {
 
 export function SingleRow({ cliente }: SingleRowProps) {
     const [isUserCardModalOpen, setIsUserCardModalOpen] = useState(false)
-    console.log(cliente)
 
     return (
         <Dialog.Root open={isUserCardModalOpen} onOpenChange={setIsUserCardModalOpen}>

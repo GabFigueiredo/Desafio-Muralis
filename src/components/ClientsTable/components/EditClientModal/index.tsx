@@ -4,6 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { CloseButton, Content, Overlay } from './styles'
 import { XCircle } from '@phosphor-icons/react'
+import { useContext } from 'react'
+import { ClientContext } from '../../../../contexts/ClientsContext'
 
 interface Cliente {
     id: number,
@@ -28,12 +30,15 @@ const NewClientSchema = z.object({
 type newClientFormInputs = z.infer<typeof NewClientSchema>
 
 export function EditClientModal({ cliente, setIsEditModalOpen }: EditClientModalProps) {
+    const { editClient } = useContext(ClientContext)
 
     const { register, handleSubmit, watch } = useForm<newClientFormInputs>({
         resolver: zodResolver(NewClientSchema),
     })
 
-    function handleEditClient() {
+    function handleEditClient(data: newClientFormInputs) {
+        const updatedClient = {...cliente, ...data}
+        editClient(cliente.id, updatedClient)
         setIsEditModalOpen(false)
     }
 
@@ -56,27 +61,27 @@ export function EditClientModal({ cliente, setIsEditModalOpen }: EditClientModal
                         <input
                             placeholder='Nome'
                             required
-                            value={cliente.nome}
+                            defaultValue={cliente.nome}
                             {...register("nome")}
                         />
                         <input
                             placeholder='CPF'
                             required
-                            value={cliente.CPF}
+                            defaultValue={cliente.CPF}
                             {...register("cpf")}
                         />
                         <input
                             placeholder='Endereço'
-                            value={cliente.endereco}
+                            defaultValue={cliente.endereco}
                             {...register("endereco")}
                         />
                         <input
                             type='date' 
                             placeholder='Data de nascimento'
-                            value={cliente.DtNascimento}
+                            defaultValue={cliente.DtNascimento}
                             {...register("DtNascimento")}
                         />
-                        <button type='submit' disabled={isSubmitValid} >Cadastrar</button>
+                        <button type='submit' disabled={isSubmitValid}>Editar</button>
                     </form>
                 </Content>
             </Dialog.Portal>

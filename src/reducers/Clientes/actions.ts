@@ -28,7 +28,7 @@ export function editClientAction(IDToEdit: number, newValues: Cliente) {
     return {
         type: ActionTypes.EDIT_CLIENT,
             payload: {
-                iDToEdit: iDToEdit,
+                IDToEdit: IDToEdit,
                 newValues: newValues
             }
         }

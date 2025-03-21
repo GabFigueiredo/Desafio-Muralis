@@ -1,24 +1,27 @@
-import { CreateButton } from "../../components/CreateButton";
+import { useState } from "react";
 import { MainContainer } from "./styles";
+import * as Dialog from '@radix-ui/react-dialog'
+import { NewContactModal } from "../../components/NewContactModal";
+import { UserCirclePlus } from "@phosphor-icons/react";
 
-
-const contactMock = [
-    {
-        id: 1000,
-        client_id: 101,
-        tipo: "Alimentação",
-        valor: "47.50",
-        observacao: "Esse contato possui uma observação"
-    }
-]
-    
 
 export function Contatos() {
+    const [isEditContactModal, setIsEditContactModal] = useState(false)
+
+
     return (
         <MainContainer>
                 <div>
                     <strong>Contatos</strong>
-                    <CreateButton />
+                    <Dialog.Root open={isEditContactModal} onOpenChange={setIsEditContactModal}>
+                        <Dialog.Trigger asChild>
+                        <Button>
+                            <p>Criar</p>
+                            <UserCirclePlus size={20}/>
+                        </Button>
+                        </Dialog.Trigger>
+                        <NewContactModal setIsOpen={setIsOpen}/>
+                    </Dialog.Root>
                 </div>
         </MainContainer>
 )

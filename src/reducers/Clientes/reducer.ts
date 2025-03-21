@@ -23,13 +23,16 @@ export function clientsReducer(state: Cliente[], action: any) {
                 const index = draft.findIndex(client => client.id === action.payload.ClientIDToRemove);
                 if (index !== -1) {
                     draft.splice(index, 1);
-                } // Remove o item diretamente
+                } 
             })
-        case ActionTypes.EDIT_CLIENT:
-            return produce(state, draft => {
-                const index = draft.findIndex(client => client.id === action.payload.id);
+            case ActionTypes.EDIT_CLIENT:
+                return produce(state, draft => {
+                    console.log("AQUI O ACTION PAYLOAD")
+                    console.log(action.payload)
+                    const index = draft.findIndex(client => client.id === action.payload.IDToEdit);
+                    console.log(index)
                 if (index !== -1) {
-                    draft[index] = { ...draft[index], ...action.payload.updatedData };
+                    draft[index] = { ...draft[index], ...action.payload.newValues };
                 }
             });
 
