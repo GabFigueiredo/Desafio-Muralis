@@ -39,11 +39,6 @@ export function NewClientModal({ setIsOpen }: NewClientModalProps) {
     })
 
     async function handleCreateNewClient(data: newClientFormInputs) {
-        if (data.cpf.length < 14) {
-            console.log("Cpf inválido")
-            return
-        }
-
         const isNewContactValid = clientes.some(client => client.cpf === data.cpf);
 
 

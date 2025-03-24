@@ -31,10 +31,8 @@ export function EditClientModal({ cliente, setIsEditModalOpen }: EditClientModal
     })
 
     function handleEditClient(data: newClientFormInputs) {
-        console.log(data.data_nascimento)
 
         const updatedClient = {...cliente, ...data}
-        console.log(updatedClient)
         editClient(cliente.id, updatedClient)
         setIsEditModalOpen(false)
     }
