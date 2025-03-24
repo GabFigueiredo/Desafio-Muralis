@@ -59,9 +59,8 @@ export const SearchBar = styled.div `
 
     border-radius: 6px;
     padding: 0px;
-    gap: 16px;
-
-    gap: 1rem;
+    border: solid 1px ${props => props.theme.tableHeadGray};
+    background-color: ${props => props.theme.inputGray};
 `
 
 export const SearchField = styled.form `
@@ -76,7 +75,8 @@ export const SearchField = styled.form `
         flex: 1;
 
         padding: 1rem;
-        border-radius: 6px;
+        border-top-left-radius: 6px;
+        border-top-left-radius: 6px;
         border: 0;
         background-color: ${props => props.theme.inputGray};
         &::placeholder {
@@ -107,6 +107,7 @@ export const FilterOptionContainer = styled(RadioGroup.Root)`
     align-items: center;
     background-color: ${props => props.theme.inputGray};
     border-radius: 6px;
+    border: solid 1px ${props => props.theme.tableHeadGray};
 ` 
 
 export const OptionButton = styled(RadioGroup.Item)`

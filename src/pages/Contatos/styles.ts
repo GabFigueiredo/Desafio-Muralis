@@ -41,3 +41,10 @@ export const Button = styled.button `
         color: ${props => props.theme.white};
     }
 `
+
+export const TableContainer = styled.div `
+    flex: 1;
+    max-height: calc(100vh - 17rem);
+    overflow: auto; 
+    width: 100%;
+`

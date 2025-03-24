@@ -1,13 +1,14 @@
 import { useForm, Controller } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { ClientContext } from '../../contexts/ClientsContext'
 import * as Dialog from '@radix-ui/react-dialog'
 import { CloseButton, Content, Overlay } from './styles'
 import { XCircle } from '@phosphor-icons/react'
-import { dateFormatter } from '../../utils/formatter'
 import Cleave from 'cleave.js/react';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 
 interface NewClientModalProps {
@@ -17,14 +18,15 @@ interface NewClientModalProps {
 const NewClientSchema = z.object({
     nome: z.string(),
     cpf: z.string(),
-    DtNascimento: z.string(),
+    data_nascimento: z.string(),
     endereco: z.string(),
 })
 
 type newClientFormInputs = z.infer<typeof NewClientSchema>
 
 export function NewClientModal({ setIsOpen }: NewClientModalProps) {
-    const { createNewClient, clientes } = useContext(ClientContext)
+    const { createNewClient, state: {clientes} } = useContext(ClientContext)
+    const [isSnackbarOpen, setIsSnackBarOpen] = useState(false)
 
     const {register,
         handleSubmit,
@@ -42,28 +44,37 @@ export function NewClientModal({ setIsOpen }: NewClientModalProps) {
             return
         }
 
-        const ultimoDaLista = clientes.length > 0 ? clientes[clientes.length - 1] : null;
-        const newID = ultimoDaLista ? ultimoDaLista.id + 1 : 1; 
+        const isNewContactValid = clientes.some(client => client.cpf === data.cpf);
 
-        const date = new Date(data.DtNascimento)
-        const formattedDate = dateFormatter.format(date)
 
-        createNewClient({
-            id: newID,
-            CPF: data.cpf,
-            nome: data.nome,
-            DtNascimento: formattedDate,
-            endereco: data.endereco
-        })
-        setIsOpen(false)
-        reset()
+        if (!isNewContactValid) {
+            createNewClient({
+                id: 0,
+                cpf: data.cpf,
+                nome: data.nome,
+                data_nascimento: data.data_nascimento,
+                endereco: data.endereco
+            })
+            setIsOpen(false)
+            reset()
+
+        } else {
+            setIsSnackBarOpen(true)
+            return
+        }
+
     }
     
+
+    function handleSnackBarClose() {
+        setIsSnackBarOpen(false)
+    }
+
     // Visibilidade do Botão Submit
     const nome = watch("nome");
     const cpf = watch("cpf")
     
-    const isSubmitValid = !(nome && cpf?.length < 14);
+    const isSubmitValid = !(nome && cpf?.length === 14);
 
     return (
             <Dialog.Portal>
@@ -98,7 +109,6 @@ export function NewClientModal({ setIsOpen }: NewClientModalProps) {
                                             numericOnly: true
                                         }}
                                         onChange={(e) => {
-                                            console.log("Current CPF Value:", e.target.value, "Length:", e.target.value.length);
                                             field.onChange(e.target.value);
                                             field.onBlur();
                                         }}
@@ -113,11 +123,20 @@ export function NewClientModal({ setIsOpen }: NewClientModalProps) {
                         <input
                             type='date' 
                             placeholder='Data de nascimento'
-                            {...register("DtNascimento")}
+                            {...register("data_nascimento")}
                         />
                         <button type='submit' disabled={isSubmitValid} >Cadastrar</button>
                     </form>
-                </Content>
+                    </Content>
+                    <Snackbar
+                        open={isSnackbarOpen}
+                        autoHideDuration={2000}
+                        onClose={handleSnackBarClose} // 3 segundos para fechar automaticamente
+                        >
+                        <Alert onClose={handleSnackBarClose} severity="warning">
+                            Esse CPF já está cadastrado no sistema
+                        </Alert>
+                    </Snackbar>
             </Dialog.Portal>
     )
 }

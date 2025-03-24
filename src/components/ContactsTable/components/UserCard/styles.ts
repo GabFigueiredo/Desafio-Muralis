@@ -102,6 +102,7 @@ export const TableStyle = styled.table `
 
 `
 
+
 export const TBodyTable = styled.tbody `
     > tr {
         background-color: ${props => props.theme.tableColor};
@@ -127,13 +128,4 @@ export const TBodyTable = styled.tbody `
     tr + tr td {
         border-top: solid 1px ${props => props.theme.tableHeadGray};
     }
-`
-
-export const ScrollContainer = styled.div`
-    width: 100%;
-    max-height: 500px;
-
-
-    overflow: auto;
-
 `

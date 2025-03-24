@@ -6,92 +6,64 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { CloseButton, Content, Overlay, RadioButton, RadioGroupController, RadioGroupRoot } from './styles'
 import { XCircle } from '@phosphor-icons/react'
-import { useContext, useState } from 'react'
-import { ClientContext } from '../../contexts/ClientsContext'
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
+import { useContext } from 'react'
+import { ClientContext } from '../../../../contexts/ClientsContext'
+import { Contato } from '../../../../interfaces/Contato'
+
 
 interface NewContactModalProps {
-    setIsEditContactModal: (isOpen: boolean) => void;
+    setIsEditModalOpen: (isOpen: boolean) => void;
+    contato: Contato
 }
 
-
-const NewContactSchema = z.object({
-    client_id: z.number(),
+const EditContactSchema = z.object({
     tipo: z.enum(['Email', 'Telefone']),
     valor: z.string(),
     observacao: z.string(),
 })
 
-type newContactFormInputs = z.infer<typeof NewContactSchema>
+type eidtContactFormInputs = z.infer<typeof EditContactSchema>
 
-export function NewContactModal({setIsEditContactModal}: NewContactModalProps) {
-    const { state: { clientes }, createNewContact } = useContext(ClientContext)
-    const [isSnackbarOpen, setIsSnackBarOpen] = useState(false)
+export function EditContactModal({ setIsEditModalOpen, contato}: NewContactModalProps) {
+    const { editContact } = useContext(ClientContext)
 
 
-    const { register, reset, handleSubmit, control, watch } = useForm<newContactFormInputs>({
-        resolver: zodResolver(NewContactSchema)
+    const { register, reset, handleSubmit, control, watch } = useForm<eidtContactFormInputs>({
+        resolver: zodResolver(EditContactSchema)
     })
 
 
-    async function handleCreateNewContact(data: newContactFormInputs) {
-        // Verifica se o novo contato tem um cliente existente
-        const isNewContactValid = clientes.some(client => client.id === data.client_id);
-
-        if (isNewContactValid) {
-            createNewContact({
-                id: 0,
-                client_id: data.client_id,
-                tipo: data.tipo,
-                valor: data.valor,
-                observacao: data.observacao
-            })
-        } else {
-            setIsSnackBarOpen(true)
-            return
-        }
-
-        setIsEditContactModal(false)
+    async function handleEditContact(data: eidtContactFormInputs) {
+        const updatedClient = {...contato, ...data}
+        editContact(contato.id, updatedClient)
+        setIsEditModalOpen(false)
         reset()
-    }
-
-    function handleSnackBarClose() {
-        setIsSnackBarOpen(false)
     }
 
     const typePlaceholder = watch("tipo")
 
     // Visibilidade do botão submit
-    const client_id = watch("client_id")
     const valor = watch("valor")
 
-    const isSubmitValid = !(valor && client_id);
+    const isSubmitValid = !(valor);
 
     return (
         <Dialog.Portal>
             <Overlay />
             <Content>
                 <div>
-                    <Dialog.Title>Novo Contato</Dialog.Title>
+                    <Dialog.Title>Editar contato</Dialog.Title>
                     <CloseButton>
                         <XCircle size={32}/>
                     </CloseButton> 
                 </div>
 
-                <form onSubmit={handleSubmit(handleCreateNewContact)}>
-                    <input type='number'
-                        placeholder='ID do cliente'
-                        {...register("client_id", {valueAsNumber: true})}
-                        required
-                        >
-                    </input>
-
+                <form onSubmit={handleSubmit(handleEditContact)}>
                     <RadioGroupController>
                             <Controller
                                 name="tipo"
                                 control={control}
-                                defaultValue='Email'
+                                defaultValue={contato.tipo}
                                 render={({ field }) => (
                                     <RadioGroupRoot {...field} onValueChange={field.onChange} value={field.value}>
                                         <RadioButton value='Email'>
@@ -107,28 +79,19 @@ export function NewContactModal({setIsEditContactModal}: NewContactModalProps) {
                         <input
                             placeholder={typePlaceholder}
                             required
+                            defaultValue={contato.valor}
                             {...register("valor")}
                         />
                     </RadioGroupController>
                     <input
                         placeholder='Observação'
                         required
+                        defaultValue={contato.observacao}
                         {...register("observacao")}
                     />
                     <button type='submit' disabled={isSubmitValid} >Cadastrar</button>
                 </form>
             </Content>
-
-            <Snackbar
-                open={isSnackbarOpen}
-                autoHideDuration={2000}
-                onClose={handleSnackBarClose} // 3 segundos para fechar automaticamente
-                >
-                <Alert onClose={handleSnackBarClose} severity="warning">
-                    Esse ID de cliente não existe no sistema
-                </Alert>
-            </Snackbar>
-
         </Dialog.Portal>
     )
 }

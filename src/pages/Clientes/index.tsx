@@ -12,13 +12,13 @@ export function Clientes() {
     const [filterContent, setFilterContent] = useState("")
     const [filterOption, setFilterOption] = useState("nome")
 
-    const { clientes } = useContext(ClientContext);
+    const { state: {clientes} } = useContext(ClientContext);
     
     const filteredList = clientes.filter(cliente => {
         if (filterOption === "nome") {
             return cliente.nome.toLowerCase().includes(filterContent.toLowerCase())
         } else {
-            return cliente.CPF.toLowerCase().includes(filterContent.toLowerCase())
+            return cliente.cpf.toLowerCase().includes(filterContent.toLowerCase())
         }
     })
 

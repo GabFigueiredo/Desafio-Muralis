@@ -1,13 +1,6 @@
+import { Cliente } from "../../interfaces/Cliente";
 import { SingleRow } from "./components/Row";
 import { TableStyle, TBodyTable, TheadTable } from "./styles";
-
-export interface Cliente {
-    id: number,
-    CPF: string,
-    nome: string,
-    DtNascimento: string,
-    endereco: string
-}
 
 interface ClientsTableProps {
     clientes: Cliente[]
@@ -35,19 +28,3 @@ export function ClientsTable({ clientes }: ClientsTableProps) {
     )
 }
 
-
-
-{/* <tr>
-    <td>101</td>
-    <td>Mário Marcos Martins</td>
-    <td>93862701927</td>
-    <td>24/03/2006</td>
-    <td>Rua da bondade, 12 - Jacareí</td>
-</tr>
-<tr>
-    <td>102</td>
-    <td>Henry Murilo Lampoglio</td>
-    <td>85927836192</td>
-    <td>13/07/2046</td>
-    <td>Rua do código, 10 - Mogi das Cruzes</td>
-</tr> */}
